@@ -1,4 +1,4 @@
-# 📘 Proyecto Calculadora Matemática con SymPy
+# 📘 Proyecto Math QED
 
 ## 📌 Descripción del Proyecto
 

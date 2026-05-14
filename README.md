@@ -137,4 +137,5 @@ x + x + 2
 ```
 
 ## Desarrolladores:
-
+<img src="https://github.com/SosaUlises42/TrabajosTrevi/blob/main/yoese.jpg?raw=true" alt="Foto" width="25%" height="25%">
+<img src="https://github.com/SosaUlises42/TrabajosTrevi/blob/main/yoese.jpg?raw=true" alt="Foto" width="25%" height="25%">

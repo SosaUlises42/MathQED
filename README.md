@@ -141,17 +141,21 @@ x + x + 2
 <tr>
 <th>
   <img src="https://github.com/SosaUlises42/TrabajosTrevi/blob/main/yoese.jpg?raw=true" alt="Foto" width="50%" height="50%">
-  Sosa Ferman Jorge Ulises
-  23308060610395
-  23308060610395@cetis61.edu.mx
-  6°D
+  <p>
+    <strong>Nombre:</strong> Sosa Ferman Jorge Ulises<br>
+    <strong>Matrícula:</strong> 23308060610395<br>
+    <strong>Correo:</strong> 23308060610395@cetis61.edu.mx<br>
+    <strong>Grupo:</strong> 6°D
+  </p>
 </th>
 <th>
   <img width="50%" height="50%" alt="image" src="https://github.com/user-attachments/assets/071f3975-d490-47bd-96e6-3658a7df79d2" />
-  Alvarez Medina Francisco
-  23308060610104
-  23308060610104@cetis61.edu.mx
-  6°D
+  <p>
+    <strong>Nombre:</strong> Alvarez Medina Francisco<br>
+    <strong>Matrícula:</strong> 23308060610104<br>
+    <strong>Correo:</strong> 23308060610104@cetis61.edu.mx<br>
+    <strong>Grupo:</strong> 6°D
+  </p>
 </th>
 </tr>
 </table>

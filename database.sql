@@ -20,6 +20,10 @@ SET time_zone = "+00:00";
 -- Base de datos: `mathqed`
 --
 
+-- CREAR LA BASE DE DATOS Y USARLA
+CREATE DATABASE IF NOT EXISTS `mathqed` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `mathqed`;
+
 -- --------------------------------------------------------
 
 --

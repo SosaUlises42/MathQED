@@ -138,4 +138,4 @@ x + x + 2
 
 ## Desarrolladores:
 <img src="https://github.com/SosaUlises42/TrabajosTrevi/blob/main/yoese.jpg?raw=true" alt="Foto" width="25%" height="25%">
-<img src="https://github.com/SosaUlises42/TrabajosTrevi/blob/main/yoese.jpg?raw=true" alt="Foto" width="25%" height="25%">
+<img width="25%" height="25%" alt="image" src="https://github.com/user-attachments/assets/071f3975-d490-47bd-96e6-3658a7df79d2" />

@@ -1,0 +1,18 @@
+Metadata-Version: 2.4
+Name: mathqed
+Version: 0.1.0
+Summary: Sistema de Gestión de Tareas - SIGE
+Requires-Python: >=3.13
+Description-Content-Type: text/markdown
+Requires-Dist: bcrypt>=5.0.0
+Requires-Dist: flet>=0.82.2
+Requires-Dist: mysql-connector-python>=9.6.0
+Requires-Dist: pydantic[email]>=2.12.5
+Requires-Dist: python-dotenv>=1.2.2
+Requires-Dist: setuptools>=79.0.0
+
+# MathQED
+pancho y goofy ajio
+
+git config --global user.name "alvarezmedinafrancisco" 
+git config --global user.email "23308060610104@cetis61.edu.mx"

@@ -1,7 +1,24 @@
 [project]
 name = "mathqed"
 version = "0.1.0"
-description = "Add your description here"
+description = "Sistema de Gestión de Tareas - SIGE"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "bcrypt>=5.0.0",
+    "flet>=0.82.2",
+    "mysql-connector-python>=9.6.0",
+    "pydantic[email]>=2.12.5",
+    "python-dotenv>=1.2.2",
+    "setuptools>=79.0.0",
+]
+
+[project.scripts]
+app = "main:main"
+
+[tool.uv]
+package = true 
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["views*", "models*", "controllers*", "assets*"]

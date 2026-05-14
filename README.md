@@ -134,3 +134,6 @@ Ejemplo:
 
 ```python
 x + x + 2
+
+## Desarolladores:
+

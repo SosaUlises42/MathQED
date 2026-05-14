@@ -6,8 +6,8 @@ class AuthController:
     def __init__(self):
         self.model = UsuarioModel()
         
-    def login(self, email, password):
-        user = self.model.validar_login(email, password)
+    def login(self, nombre, password):
+        user = self.model.validar_login(nombre, password)
         if user:
             return user, "Login exitoso"
         return None, "Email o contraseña incorrectos"

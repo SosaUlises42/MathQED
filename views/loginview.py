@@ -3,11 +3,10 @@ from controllers.usercontroller import AuthController
 
 def LoginView(page: ft.Page, auth_controller):
     # Campos de entrada
-    email_input = ft.TextField(
-        label="Correo electrónico",
+    nombre_input = ft.TextField(
+        label="Nombre de Usuario",
         width=350,
-        border_radius=10,
-        keyboard_type=ft.KeyboardType.EMAIL
+        border_radius=10
     )
 
     pass_input = ft.TextField(
@@ -20,13 +19,13 @@ def LoginView(page: ft.Page, auth_controller):
 
     # Lógica de inicio de sesión
     def login_click(e):
-        if not email_input.value or not pass_input.value:
+        if not nombre_input.value or not pass_input.value:
             page.snack_bar = ft.SnackBar(ft.Text("Por favor, llene todos los campos"))
             page.snack_bar.open = True
             page.update()
             return
 
-        user, msg = auth_controller.login(email_input.value, pass_input.value)
+        user, msg = auth_controller.login(nombre_input.value, pass_input.value)
 
         if user:
             page.session.store.set("user", user)
@@ -62,7 +61,7 @@ def LoginView(page: ft.Page, auth_controller):
             ft.Column(
                 [
                     ft.Text("Acceso al Sistema", size=24, weight="bold"),
-                    email_input,
+                    nombre_input,
                     pass_input,
                     login_button,
                     ft.TextButton(

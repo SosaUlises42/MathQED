@@ -7,8 +7,7 @@ mathqed.egg-info/dependency_links.txt
 mathqed.egg-info/entry_points.txt
 mathqed.egg-info/requires.txt
 mathqed.egg-info/top_level.txt
-models/databsemodel.py
+models/databasemodel.py
 models/schemasmodel.py
 models/usermodel.py
-views/dashboardview.py
 views/loginview.py

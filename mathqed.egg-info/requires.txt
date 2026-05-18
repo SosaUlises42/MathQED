@@ -1,5 +1,7 @@
 bcrypt>=5.0.0
 flet>=0.82.2
+httpx
+itsdangerous
 mysql-connector-python>=9.6.0
 pydantic[email]>=2.12.5
 python-dotenv>=1.2.2

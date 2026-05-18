@@ -9,3 +9,8 @@ validar correo si existe le mando un codigo o un link
  DATABASE.PY 
  schemas.py 
  23308060610104@cetis61.edu.mx
+ la base de datos no tiene para registrar correos 
+ ademas de buscar si se puede inyectar directamante la base de datos al programa para que se 
+ cree exactamente cuando se inicio o se haga el uv sync 
+ que el ulises ponga lo que se mando a whatsappy y ya creo 
+ 

@@ -1,0 +1,3 @@
+usar whatsapp para poder intentar recuperar codigo o por correo para mandar la consulta de un codigo pero nose 
+ademas de buscar una libreria para mandar correos al correo que se pone 
+validar correo si existe le mando un codigo o un link 

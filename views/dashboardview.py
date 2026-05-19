@@ -94,3 +94,28 @@ def RegisterView(page: ft.Page, auth_controller):
             )
         ]
     )
+
+
+def DashboardView(page: ft.Page, auth_controller):
+    return ft.View(
+        route="/dashboard",
+        vertical_alignment=ft.MainAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        appbar=ft.AppBar(
+            title=ft.Text("SIGE - Dashboard"),
+            bgcolor="bluegrey900",
+            color="white"
+        ),
+        controls=[
+            ft.Column(
+                [
+                    ft.Text("Bienvenido al Dashboard", size=24, weight="bold"),
+                    ft.Text("Has iniciado sesión correctamente."),
+                    ft.ElevatedButton("Cerrar sesión", on_click=lambda _: page.go("/"), width=200)
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                tight=True,
+                spacing=20
+            )
+        ]
+    )

@@ -1,7 +1,7 @@
 import flet as ft 
 from controllers.usercontroller import AuthController
 from views.loginview import LoginView
-from views.dashboardview import RegisterView
+from views.dashboardview import RegisterView, DashboardView
 
 def start(page: ft.Page):
     # Configuración básica de la página
@@ -20,19 +20,20 @@ def start(page: ft.Page):
         print(f"Error al iniciar controladores: {ex}")
 
     def route_change(e):
-        print(f"Cambiando ruta a: {page.route}")
+        route = page.route or "/"
+        print(f"Cambiando ruta a: {route}")
         page.views.clear()
         # rutas de la app: login, registro y dashboard
-        if page.route == "/" or page.route == "":
+        if route == "/":
             print("Cargando LoginView...")
             page.views.append(LoginView(page, auth_ctrl))
-            
-        elif page.route == "/registro":
+        elif route == "/registro":
             print("Cargando RegisterView...")
             page.views.append(RegisterView(page, auth_ctrl))
-            
-            
-        
+        elif route == "/dashboard":
+            print("Cargando DashboardView...")
+            page.views.append(DashboardView(page, auth_ctrl))
+
         # seguridad por si la ruta no existe
         if not page.views:
             page.views.append(
@@ -50,11 +51,11 @@ def start(page: ft.Page):
     # Configuramos los eventos de la página
     page.on_route_change = route_change
     page.on_view_pop = view_pop
-    
-    # AJUSTE FINAL: En lugar de page.go, llamamos directamente a la función
-    # para asegurar que la primera vista se cargue sin errores de tiempo.
-    route_change(None) 
+
+    # Forzamos inicio en ruta principal para no usar rutas anteriores del historial.
+    page.views.append(LoginView(page, auth_ctrl))
     page.update()
+    page.go("/")
 
 def main():
     print("Arrancando Flet Engine...")

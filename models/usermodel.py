@@ -27,9 +27,12 @@ class UsuarioModel:
     def validar_login(self, nombre, password):
         conn = self.db.get_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM user WHERE nombre = %s", (nombre,))
+        cursor.execute(
+            "SELECT Usuario_ID, Nombre, NumeroCRTL, Contraseña AS contrasena, Grado, Grupo FROM user WHERE Nombre = %s",
+            (nombre,)
+        )
         user = cursor.fetchone()
         conn.close()
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['contraseña'].encode('utf-8')):
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['contrasena'].encode('utf-8')):
             return user
         return None

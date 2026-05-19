@@ -1,14 +1,14 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import date, time
 
 class UsuarioLogin(BaseModel):
-    email: EmailStr
+    email: str
     password: str = Field(..., min_length=8)
     
 class UsuarioSchema(BaseModel):
     nombre: str = Field(..., min_length=3, max_length=100)
-    email: EmailStr
+    email: str
     password: str = Field(..., min_length=8)
     
 class TareaSchema(BaseModel):

@@ -1,4 +1,5 @@
 README.md
+main.py
 pyproject.toml
 controllers/__init__.py
 controllers/usercontroller.py

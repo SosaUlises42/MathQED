@@ -10,7 +10,7 @@ dependencies = [
     "httpx",
     "itsdangerous",
     "mysql-connector-python>=9.6.0",
-    "pydantic[email]>=2.12.5",
+    "pydantic>=2.12.5",
     "python-dotenv>=1.2.2",
     "setuptools>=79.0.0",
 ]
@@ -21,6 +21,9 @@ build-backend = "setuptools.build_meta"
 
 [project.scripts]
 app = "main:main"
+
+[tool.setuptools]
+py-modules = ["main"]
 
 [tool.setuptools.packages.find]
 where = ["."]

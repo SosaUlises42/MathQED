@@ -9,7 +9,7 @@ Requires-Dist: flet>=0.82.2
 Requires-Dist: httpx
 Requires-Dist: itsdangerous
 Requires-Dist: mysql-connector-python>=9.6.0
-Requires-Dist: pydantic[email]>=2.12.5
+Requires-Dist: pydantic>=2.12.5
 Requires-Dist: python-dotenv>=1.2.2
 Requires-Dist: setuptools>=79.0.0
 

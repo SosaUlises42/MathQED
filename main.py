@@ -1,6 +1,7 @@
 import flet as ft 
 from controllers.usercontroller import AuthController
 from views.loginview import LoginView
+from views.dashboardview import RegisterView
 
 def start(page: ft.Page):
     # Configuración básica de la página
@@ -26,6 +27,10 @@ def start(page: ft.Page):
             print("Cargando LoginView...")
             page.views.append(LoginView(page, auth_ctrl))
             
+        elif page.route == "/registro":
+            print("Cargando RegisterView...")
+            page.views.append(RegisterView(page, auth_ctrl))
+            
             
         
         # seguridad por si la ruta no existe
@@ -33,7 +38,7 @@ def start(page: ft.Page):
             page.views.append(
                 ft.View("/", [ft.Text("Error 404: Ruta no encontrada")])
             )
-        
+
         page.update()
 
     def view_pop(e):
@@ -54,6 +59,6 @@ def start(page: ft.Page):
 def main():
     print("Arrancando Flet Engine...")
     ft.app(target=start)
-    
+
 if __name__ == "__main__":
     main()

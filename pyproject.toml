@@ -15,11 +15,12 @@ dependencies = [
     "setuptools>=79.0.0",
 ]
 
+[build-system]
+requires = ["setuptools>=79.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project.scripts]
 app = "main:main"
-
-[tool.uv]
-package = true 
 
 [tool.setuptools.packages.find]
 where = ["."]

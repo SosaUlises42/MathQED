@@ -17,3 +17,4 @@ models/usermodel.py
 views/__init__.py
 views/dashboardview.py
 views/loginview.py
+views/recoverview.py

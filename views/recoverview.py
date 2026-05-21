@@ -129,7 +129,8 @@ Si no solicitaste este código, ignora este mensaje.
             )
 
             status_text.color = ft.Colors.GREEN
-            page.go(f"/confirmacion/{correo_input.value}")
+            page.session.store.set("reset_email", correo_input.value)
+            page.go("/confirmacion")
 
         else:
 
@@ -190,14 +191,25 @@ Si no solicitaste este código, ignora este mensaje.
                             on_click=enviar_codigo
                         ),
 
-                        verificar_btn
+                        verificar_btn,
+
+                        ft.TextButton(
+                            "Volver al menú",
+                            on_click=lambda _: page.go("/"),
+                            style=ft.ButtonStyle(
+                                bgcolor=ft.Colors.TRANSPARENT,
+                                color=ft.Colors.BLUE
+                            )
+                        )
                     ]
                 )
             )
         ]
     )
 
-def Cambiacontraview(page: ft.Page, auth_ctrl, correo):
+def Cambiacontraview(page: ft.Page, auth_ctrl):
+
+    correo = page.session.store.get("reset_email") or ""
 
     pass_input = ft.TextField(
         label="Contraseña",
@@ -215,55 +227,89 @@ def Cambiacontraview(page: ft.Page, auth_ctrl, correo):
         border_radius=10
     )
 
+    status_text = ft.Text("")
+
+    volver_login_button = ft.ElevatedButton(
+        "Volver a iniciar sesión",
+        on_click=lambda e: page.go("/"),
+        width=350,
+        bgcolor="blue",
+        color="white",
+        visible=False
+    )
+
+    def actualizar_contrasena(nueva_password, usuario_correo):
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="mathQED"
+        )
+        cursor = conexion.cursor()
+        try:
+            consultas = [
+                (
+                    "UPDATE user SET Contraseña = %s WHERE Nombre = %s",
+                    (nueva_password, usuario_correo)
+                ),
+                (
+                    "UPDATE user SET Contraseña = %s WHERE correo = %s",
+                    (nueva_password, usuario_correo)
+                ),
+                (
+                    "UPDATE usuarios SET password = %s WHERE correo = %s",
+                    (nueva_password, usuario_correo)
+                )
+            ]
+            for consulta, valores in consultas:
+                try:
+                    cursor.execute(consulta, valores)
+                    if cursor.rowcount > 0:
+                        conexion.commit()
+                        return True
+                except mysql.connector.Error:
+                    continue
+            conexion.commit()
+            return False
+        finally:
+            cursor.close()
+            conexion.close()
+
     def login_click(e):
         if not pass_input.value or not conf_input.value:
             page.snack_bar = ft.SnackBar(ft.Text("Por favor, llene todos los campos"))
             page.snack_bar.open = True
             page.update()
-        elif pass_input.value != conf_input.value:
-            page.snack_bar = ft.SnackBar(ft.Text("Las contraseñas no coninciden"))
+            return
+
+        if pass_input.value != conf_input.value:
+            page.snack_bar = ft.SnackBar(ft.Text("Las contraseñas no coinciden"))
             page.snack_bar.open = True
             page.update()
-        else:
-            conexion = mysql.connector.connect(
+            return
 
-                host="localhost",
-                user="root",
-                password="",
-                database="mathQED"
+        try:
+            if not correo:
+                raise Exception("No se encontró el correo para resetear contraseña")
 
-            )
+            actualizado = actualizar_contrasena(conf_input.value, correo)
+            if not actualizado:
+                raise Exception("No se encontró el usuario o correo para actualizar")
 
-            cursor = conexion.cursor()
-
-            consulta = """
-            UPDATE usuarios
-            SET password = %s
-            WHERE correo = %s
-            """
-
-            valores = (
-                conf_input.value,
-                correo
-            )
-
-            cursor.execute(
-                consulta,
-                valores
-            )
-
-            conexion.commit()
-
-            cursor.close()
-
-            conexion.close()
-
-            print("Contraseña actualizada")
-            page.go("/dashboard")  
-
+            status_text.value = "Contraseña actualizada correctamente. Ahora vuelve a iniciar sesión."
+            status_text.color = ft.Colors.GREEN
+            pass_input.disabled = True
+            conf_input.disabled = True
+            login_button.visible = False
+            volver_login_button.visible = True
+            page.update()
+        except Exception as ex:
+            status_text.value = f"Error al cambiar contraseña: {ex}"
+            status_text.color = ft.Colors.RED
+            page.update()
 
     login_button = ft.ElevatedButton(
-        "Entrar",
+        "Cambiar contraseña",
         on_click=login_click,
         width=350,
         bgcolor="blue",
@@ -271,16 +317,23 @@ def Cambiacontraview(page: ft.Page, auth_ctrl, correo):
     )
 
     return ft.View(
-        route="/confirmacion",
+        route=page.route or "/confirmacion",
+        appbar=ft.AppBar(
+            title=ft.Text("Cambiar contraseña"),
+            bgcolor="bluegrey900",
+            color="white"
+        ),
         vertical_alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         controls=[
             ft.Column(
                 [
                     ft.Text("Nueva contraseña", size=24, weight="bold"),
-                    conf_input,
                     pass_input,
-                    login_button
+                    conf_input,
+                    login_button,
+                    volver_login_button,
+                    status_text
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 tight=True,

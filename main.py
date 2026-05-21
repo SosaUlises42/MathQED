@@ -36,9 +36,8 @@ def start(page: ft.Page):
             page.views.append(DashboardView(page, auth_ctrl))
         elif route == "/recover":
             page.views.append(RecoverView(page, auth_ctrl))
-        elif route == "/confirmacion/":
-            correo = route.split("/")[-1]
-            page.views.append(Cambiacontraview(page, auth_ctrl, correo))
+        elif route == "/confirmacion":
+            page.views.append(Cambiacontraview(page, auth_ctrl))
 
         # seguridad por si la ruta no existe
         if not page.views:

@@ -2,6 +2,7 @@ import flet as ft
 from controllers.usercontroller import AuthController
 from views.loginview import LoginView
 from views.dashboardview import RegisterView, DashboardView
+from views.recoverview import RecoverView, Cambiacontraview
 
 def start(page: ft.Page):
     # Configuración básica de la página
@@ -33,6 +34,11 @@ def start(page: ft.Page):
         elif route == "/dashboard":
             print("Cargando DashboardView...")
             page.views.append(DashboardView(page, auth_ctrl))
+        elif route == "/recover":
+            page.views.append(RecoverView(page, auth_ctrl))
+        elif route == "/confirmacion/":
+            correo = route.split("/")[-1]
+            page.views.append(Cambiacontraview(page, auth_ctrl, correo))
 
         # seguridad por si la ruta no existe
         if not page.views:

@@ -47,6 +47,7 @@ CREATE TABLE `historial` (
 CREATE TABLE `user` (
   `Usuario_ID` int(11) NOT NULL,
   `Nombre` varchar(100) NOT NULL,
+  `Correo` varchar(100) NOT NULL,
   `NumeroCRTL` varchar(14) NOT NULL,
   `Contraseña` varchar(255) NOT NULL,
   `Grado` varchar(1) NOT NULL,

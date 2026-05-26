@@ -150,25 +150,71 @@ def DashboardView(page: ft.Page, auth_controller):
     print(usuario)
     nombre = usuario["Nombre"]
 
+    request_input = ft.TextField(
+        label="Realiza una solicitud",
+        width=400,
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20,
+        min_lines=1,
+        max_lines=3,
+        multiline=True
+    )
+
+    def send_request_click(e):
+        if request_input.value.strip():
+            page.snack_bar = ft.SnackBar(ft.Text(f"Solicitud enviada: {request_input.value}"))
+            page.snack_bar.open = True
+            request_input.value = ""
+            page.update()
+
+    send_button = ft.ElevatedButton(
+        "→",
+        on_click=send_request_click,
+        width=50,
+        height=50,
+        bgcolor="#404040",
+        color="white",
+        style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=25))
+    )
+
+    request_row = ft.Row(
+        [request_input, send_button],
+        alignment=ft.MainAxisAlignment.CENTER,
+        vertical_alignment=ft.CrossAxisAlignment.END,
+        spacing=10
+    )
+
     return ft.View(
         route="/dashboard",
         vertical_alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        bgcolor="#0d0d0d",
         appbar=ft.AppBar(
-            title=ft.Text("SIGE - Dashboard"),
-            bgcolor="bluegrey900",
-            color="white"
+            title=ft.Text("SIGE - Dashboard", color="white"),
+            bgcolor="#1a1a1a",
+            actions=[
+                ft.TextButton(
+                    "Salir",
+                    on_click=lambda _: page.go("/")
+                )
+            ]
         ),
         controls=[
             ft.Column(
                 [
-                    ft.Text(f"Bienvenido al Dashboard {nombre}", size=24, weight="bold"),
-                    ft.Text("Has iniciado sesión correctamente."),
-                    ft.ElevatedButton("Cerrar sesión", on_click=lambda _: page.go("/"), width=200)
+                    ft.Text(f"Bienvenido al Dashboard {nombre}", size=28, weight="bold", color="white"),
+                    ft.Text("Has iniciado sesión correctamente.", color="#cccccc", size=14),
+                    ft.Divider(color="#333333", height=30),
+                    request_row,
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                tight=True,
-                spacing=20
+                spacing=20,
+                expand=True
             )
         ]
     )

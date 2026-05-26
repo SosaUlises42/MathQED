@@ -10,11 +10,14 @@ class UsuarioModel:
         hashed = bcrypt.hashpw(data.password.encode('utf-8'), salt)
         conn = self.db.get_connection()
         cursor = conn.cursor()
+
+        print(data)
+
         try:
             # guardo valores vacíos para los campos requeridos por la tabla
             cursor.execute(
                 "INSERT INTO user (nombre, correo, numeroCRTl, contraseña, grado, grupo) VALUES (%s, %s, %s, %s, %s, %s)",
-                (data.nombre, data.email ,"", hashed.decode('utf-8'), "", "")
+                (data.nombre, data.email ,data.control , hashed.decode('utf-8'), data.grado, data.grupo)
             )
             conn.commit()
             return True
@@ -28,7 +31,7 @@ class UsuarioModel:
         conn = self.db.get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute(
-            "SELECT Usuario_ID, Nombre, NumeroCRTL, Contraseña AS contrasena, Grado, Grupo FROM user WHERE Nombre = %s",
+            "SELECT Usuario_ID, Nombre, correo, NumeroCRTL, Contraseña AS contrasena, Grado, Grupo FROM user WHERE Nombre = %s",
             (nombre,)
         )
         user = cursor.fetchone()

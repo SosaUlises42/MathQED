@@ -188,7 +188,7 @@ def RegisterView(page: ft.Page, auth_controller):
     )
 
 
-def DashboardView(page: ft.Page, auth_controller):
+def DashboardView(page: ft.Page, Request):
 
     usuario = page.session.store.get("user")
     print(usuario)
@@ -222,6 +222,11 @@ def DashboardView(page: ft.Page, auth_controller):
         vertical_alignment=ft.CrossAxisAlignment.END,
         spacing=10
     )
+    
+    def click(e):
+        Request.stringDivisor(request_input.value)
+        request_input.value = ""
+        request_input.update()
 
     return ft.View(
 
@@ -316,7 +321,9 @@ def DashboardView(page: ft.Page, auth_controller):
 
                                     bgcolor="#2563eb",
 
-                                    icon_size=22
+                                    icon_size=22,
+                                    
+                                    on_click=lambda e: click(e)
                                 ),
 
                                 border_radius=100,

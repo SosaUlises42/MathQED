@@ -16,7 +16,7 @@ class UsuarioModel:
         try:
             # guardo valores vacíos para los campos requeridos por la tabla
             cursor.execute(
-                "INSERT INTO user (nombre, correo, numeroCRTl, contraseña, grado, grupo) VALUES (%s, %s, %s, %s, %s, %s)",
+                "INSERT INTO user (nombre, correo, numeroCRTl, Password_Hash, grado, grupo) VALUES (%s, %s, %s, %s, %s, %s)",
                 (data.nombre, data.email ,data.control , hashed.decode('utf-8'), data.grado, data.grupo)
             )
             conn.commit()
@@ -31,11 +31,11 @@ class UsuarioModel:
         conn = self.db.get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute(
-            "SELECT Usuario_ID, Nombre, correo, NumeroCRTL, Contraseña AS contrasena, Grado, Grupo FROM user WHERE Nombre = %s",
+            "SELECT Usuario_ID, Nombre, correo, NumeroCRTL, Password_Hash AS Password_Hash, Grado, Grupo FROM user WHERE Nombre = %s",
             (nombre,)
         )
         user = cursor.fetchone()
         conn.close()
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['contrasena'].encode('utf-8')):
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['Password_Hash'].encode('utf-8')):
             return user
         return None

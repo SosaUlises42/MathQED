@@ -1,5 +1,6 @@
 import flet as ft 
 from controllers.usercontroller import AuthController
+from controllers.promptcontroller import Request
 from views.loginview import LoginView
 from views.dashboardview import RegisterView, DashboardView
 from views.recoverview import RecoverView, Cambiacontraview
@@ -16,6 +17,7 @@ def start(page: ft.Page):
     # Cargamos los controladores
     try:
         auth_ctrl = AuthController()
+        prmt_crtl = Request()
         print("Controladores cargados exitosamente.")
     except Exception as ex:
         print(f"Error al iniciar controladores: {ex}")
@@ -33,7 +35,7 @@ def start(page: ft.Page):
             page.views.append(RegisterView(page, auth_ctrl))
         elif route == "/dashboard":
             print("Cargando DashboardView...")
-            page.views.append(DashboardView(page, auth_ctrl))
+            page.views.append(DashboardView(page, Request))
         elif route == "/recover":
             page.views.append(RecoverView(page, auth_ctrl))
         elif route == "/confirmacion":

@@ -1,5 +1,0 @@
-assets
-controllers
-main
-models
-views

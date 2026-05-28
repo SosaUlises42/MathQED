@@ -147,6 +147,11 @@ Si no solicitaste este código, ignora este mensaje.
     return ft.View(
 
         route="/recover",
+        appbar=ft.AppBar(
+            title=ft.Text("MathQED - Recuperacion de Contraseña"),
+            bgcolor="bluegrey900",
+            color="white"
+        ),
 
         controls=[
 
@@ -319,7 +324,7 @@ def Cambiacontraview(page: ft.Page, auth_ctrl):
     return ft.View(
         route=page.route or "/confirmacion",
         appbar=ft.AppBar(
-            title=ft.Text("Cambiar contraseña"),
+            title=ft.Text("MathQED - Recuperacion de Contraseña"),
             bgcolor="bluegrey900",
             color="white"
         ),

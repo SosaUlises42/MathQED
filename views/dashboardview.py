@@ -115,7 +115,7 @@ def RegisterView(page: ft.Page, auth_controller):
         vertical_alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         appbar=ft.AppBar(
-            title=ft.Text("SIGE - Registro"),
+            title=ft.Text("MathQED - Registro"),
             bgcolor="bluegrey900",
             color="white"
         ),
@@ -172,49 +172,133 @@ def DashboardView(page: ft.Page, auth_controller):
             request_input.value = ""
             page.update()
 
-    send_button = ft.ElevatedButton(
-        "→",
-        on_click=send_request_click,
-        width=50,
-        height=50,
-        bgcolor="#404040",
-        color="white",
-        style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=25))
-    )
-
     request_row = ft.Row(
-        [request_input, send_button],
+        [request_input],
         alignment=ft.MainAxisAlignment.CENTER,
         vertical_alignment=ft.CrossAxisAlignment.END,
         spacing=10
     )
 
     return ft.View(
-        route="/dashboard",
-        vertical_alignment=ft.MainAxisAlignment.CENTER,
-        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-        bgcolor="#0d0d0d",
-        appbar=ft.AppBar(
-            title=ft.Text("SIGE - Dashboard", color="white"),
-            bgcolor="#1a1a1a",
-            actions=[
-                ft.TextButton(
-                    "Salir",
-                    on_click=lambda _: page.go("/")
-                )
-            ]
+
+    route="/dashboard",
+
+    bgcolor="#0d0d0d",
+
+    appbar=ft.AppBar(
+
+        title=ft.Text(
+            "MathQED - Dashboard",
+            color="white"
         ),
-        controls=[
-            ft.Column(
-                [
-                    ft.Text(f"Bienvenido al Dashboard {nombre}", size=28, weight="bold", color="white"),
-                    ft.Text("Has iniciado sesión correctamente.", color="#cccccc", size=14),
-                    ft.Divider(color="#333333", height=30),
-                    request_row,
-                ],
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                spacing=20,
-                expand=True
+
+        bgcolor="#1a1a1a",
+
+        actions=[
+
+            ft.TextButton(
+
+                "Salir",
+
+                style=ft.ButtonStyle(
+                    color="white"
+                ),
+
+                on_click=lambda _:
+                page.go("/")
             )
         ]
-    )
+    ),
+
+    controls=[
+
+        ft.Container(
+
+            expand=True,
+
+            alignment=ft.Alignment(0, 0),
+
+            content=ft.Column(
+
+                [
+
+                    ft.Text(
+
+                        f"Bienvenido de nuevo {nombre}",
+
+                        size=32,
+
+                        weight="bold",
+
+                        color="white"
+                    ),
+
+                    ft.Text(
+
+                        "¿Con qué puedo ayudarte hoy?",
+
+                        color="#aaaaaa",
+
+                        size=16
+                    ),
+
+                    ft.Row(
+
+                        [
+
+                            ft.Container(
+
+                                content=request_row,
+
+                                border_radius=20,
+
+                                shadow=ft.BoxShadow(
+
+                                    spread_radius=1,
+
+                                    blur_radius=20,
+
+                                    color="#222222"
+                                )
+                            ),
+
+                            ft.Container(
+
+                                content=ft.IconButton(
+
+                                    icon=ft.Icons.ARROW_FORWARD,
+
+                                    icon_color="white",
+
+                                    bgcolor="#2563eb",
+
+                                    icon_size=22
+                                ),
+
+                                border_radius=100,
+
+                                shadow=ft.BoxShadow(
+
+                                    spread_radius=1,
+
+                                    blur_radius=15,
+
+                                    color="#2563eb55"
+                                )
+                            )
+                        ],
+
+                        alignment=ft.MainAxisAlignment.CENTER
+                    )
+
+                ],
+
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+
+                alignment=ft.MainAxisAlignment.CENTER,
+
+                spacing=25
+            )
+        )
+    ]
+)

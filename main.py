@@ -6,7 +6,7 @@ from views.recoverview import RecoverView, Cambiacontraview
 
 def start(page: ft.Page):
     # Configuración básica de la página
-    page.title = "SIGE - Sistema de Gestión"
+    page.title = "MathQED - Chatbot de Matematicas"
     page.window_width = 450
     page.window_height = 700
     page.theme_mode = ft.ThemeMode.LIGHT

@@ -53,7 +53,7 @@ def LoginView(page: ft.Page, auth_controller):
         vertical_alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         appbar=ft.AppBar(
-            title=ft.Text("SIGE - Login"),
+            title=ft.Text("MathQED - Login"),
             bgcolor="bluegrey900",
             color="white"
         ),

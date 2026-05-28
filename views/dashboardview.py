@@ -10,13 +10,25 @@ def RegisterView(page: ft.Page, auth_controller):
             replacement_string=""
         ),
         width=350,
-        border_radius=10
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20
     )
 
     email_input = ft.TextField(
         label="Correo electrónico",
         width=350,
-        border_radius=10,
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20,
         keyboard_type=ft.KeyboardType.EMAIL
     )
 
@@ -26,7 +38,13 @@ def RegisterView(page: ft.Page, auth_controller):
         input_filter=ft.NumbersOnlyInputFilter(),
         max_length=14,
         width=350,
-        border_radius=10
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20
     )
 
     password_input = ft.TextField(
@@ -34,7 +52,13 @@ def RegisterView(page: ft.Page, auth_controller):
         password=True,
         can_reveal_password=True,
         width=350,
-        border_radius=10
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20
     )
 
     password_confirm_input = ft.TextField(
@@ -42,7 +66,13 @@ def RegisterView(page: ft.Page, auth_controller):
         password=True,
         can_reveal_password=True,
         width=350,
-        border_radius=10
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20
     )
 
     grado_input = ft.TextField(
@@ -51,7 +81,13 @@ def RegisterView(page: ft.Page, auth_controller):
         input_filter=ft.NumbersOnlyInputFilter(),
         max_length=1,
         width=350,
-        border_radius=10
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20
     )
 
     grupo_input = ft.TextField(
@@ -63,7 +99,13 @@ def RegisterView(page: ft.Page, auth_controller):
         ),
         max_length=1,
         width=350,
-        border_radius=10
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20
     )
 
     def register_click(e):
@@ -106,23 +148,24 @@ def RegisterView(page: ft.Page, auth_controller):
         "Registrar cuenta",
         on_click=register_click,
         width=350,
-        bgcolor="blue",
+        bgcolor="#2563eb",
         color="white"
     )
 
     return ft.View(
         route="/registro",
+        bgcolor="#0d0d0d",
         vertical_alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         appbar=ft.AppBar(
-            title=ft.Text("MathQED - Registro"),
-            bgcolor="bluegrey900",
+            title=ft.Text("MathQED - Registro", color="white"),
+            bgcolor="#1a1a1a",
             color="white"
         ),
         controls=[
             ft.Column(
                 [
-                    ft.Text("Crear una cuenta nueva", size=24, weight="bold"),
+                    ft.Text("Crear una cuenta nueva", size=24, weight="bold", color="white"),
                     nombre_input,
                     email_input,
                     crtl_input,
@@ -133,7 +176,8 @@ def RegisterView(page: ft.Page, auth_controller):
                     register_button,
                     ft.TextButton(
                         "Volver al login",
-                        on_click=lambda _: page.go("/")
+                        on_click=lambda _: page.go("/"),
+                        style=ft.ButtonStyle(color="#aaaaaa")
                     )
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,

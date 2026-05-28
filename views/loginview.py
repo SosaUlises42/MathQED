@@ -6,7 +6,13 @@ def LoginView(page: ft.Page, auth_controller):
     nombre_input = ft.TextField(
         label="Nombre de Usuario",
         width=350,
-        border_radius=10
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20
     )
 
     pass_input = ft.TextField(
@@ -14,7 +20,13 @@ def LoginView(page: ft.Page, auth_controller):
         password=True,
         can_reveal_password=True,
         width=350,
-        border_radius=10
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20
     )
 
     # Lógica de inicio de sesión
@@ -40,7 +52,7 @@ def LoginView(page: ft.Page, auth_controller):
         "Entrar",
         on_click=login_click,
         width=350,
-        bgcolor="blue",
+        bgcolor="#2563eb",
         color="white"
     )
 
@@ -50,27 +62,30 @@ def LoginView(page: ft.Page, auth_controller):
     # Retorno de la vista
     return ft.View(
         route="/",
+        bgcolor="#0d0d0d",
         vertical_alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         appbar=ft.AppBar(
-            title=ft.Text("MathQED - Login"),
-            bgcolor="bluegrey900",
+            title=ft.Text("MathQED - Login", color="white"),
+            bgcolor="#1a1a1a",
             color="white"
         ),
         controls=[
             ft.Column(
                 [
-                    ft.Text("Acceso al Sistema", size=24, weight="bold"),
+                    ft.Text("Acceso al Sistema", size=24, weight="bold", color="white"),
                     nombre_input,
                     pass_input,
                     login_button,
                     ft.TextButton(
                         "¿Olvidaste tu contraseña?",
-                        on_click=lambda e: page.go("/recover")
+                        on_click=lambda e: page.go("/recover"),
+                        style=ft.ButtonStyle(color="#aaaaaa")
                     ),
                     ft.TextButton(
                         "Crear una cuenta nueva",
-                        on_click=lambda _: page.go("/registro")
+                        on_click=lambda _: page.go("/registro"),
+                        style=ft.ButtonStyle(color="#2563eb")
                     )
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,

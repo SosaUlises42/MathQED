@@ -2,9 +2,7 @@ import flet as ft
 import secrets
 import smtplib
 import mysql.connector
-
 from email.mime.text import MIMEText
-
 
 def RecoverView(page: ft.Page, auth_ctrl):
 
@@ -12,20 +10,36 @@ def RecoverView(page: ft.Page, auth_ctrl):
 
     correo_input = ft.TextField(
         label="Correo electrónico",
-        width=300
+        width=300,
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20
     )
 
     codigo_input = ft.TextField(
         label="Código",
         visible=False,
-        width=300
+        width=300,
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20
     )
 
     status_text = ft.Text("")
 
     verificar_btn = ft.ElevatedButton(
         "Verificar",
-        visible=False
+        visible=False,
+        bgcolor="#2563eb",
+        color="white"
     )
 
     # FUNCIÓN PARA ENVIAR CORREO
@@ -147,9 +161,10 @@ Si no solicitaste este código, ignora este mensaje.
     return ft.View(
 
         route="/recover",
+        bgcolor="#0d0d0d",
         appbar=ft.AppBar(
-            title=ft.Text("MathQED - Recuperacion de Contraseña"),
-            bgcolor="bluegrey900",
+            title=ft.Text("MathQED - Recuperacion de Contraseña", color="white"),
+            bgcolor="#1a1a1a",
             color="white"
         ),
 
@@ -176,13 +191,15 @@ Si no solicitaste este código, ignora este mensaje.
                         ft.Text(
                             "Recuperar contraseña",
                             size=25,
-                            weight=ft.FontWeight.BOLD
+                            weight=ft.FontWeight.BOLD,
+                            color="white"
                         ),
 
                         ft.Text(
                             "Ingresa tu correo para "
                             "recibir un código.",
-                            size=14
+                            size=14,
+                            color="#aaaaaa"
                         ),
 
                         correo_input,
@@ -193,7 +210,9 @@ Si no solicitaste este código, ignora este mensaje.
 
                         ft.ElevatedButton(
                             "Enviar código",
-                            on_click=enviar_codigo
+                            on_click=enviar_codigo,
+                            bgcolor="#2563eb",
+                            color="white"
                         ),
 
                         verificar_btn,
@@ -203,7 +222,7 @@ Si no solicitaste este código, ignora este mensaje.
                             on_click=lambda _: page.go("/"),
                             style=ft.ButtonStyle(
                                 bgcolor=ft.Colors.TRANSPARENT,
-                                color=ft.Colors.BLUE
+                                color="#aaaaaa"
                             )
                         )
                     ]
@@ -221,7 +240,13 @@ def Cambiacontraview(page: ft.Page, auth_ctrl):
         password=True,
         can_reveal_password=True,
         width=350,
-        border_radius=10
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20
     )
 
     conf_input = ft.TextField(
@@ -229,7 +254,13 @@ def Cambiacontraview(page: ft.Page, auth_ctrl):
         password=True,
         can_reveal_password=True,
         width=350,
-        border_radius=10
+        border_radius=25,
+        border_color="#404040",
+        filled=True,
+        fill_color="#262626",
+        text_style=ft.TextStyle(color="white", size=14),
+        label_style=ft.TextStyle(color="#999999", size=13),
+        content_padding=20
     )
 
     status_text = ft.Text("")
@@ -238,7 +269,7 @@ def Cambiacontraview(page: ft.Page, auth_ctrl):
         "Volver a iniciar sesión",
         on_click=lambda e: page.go("/"),
         width=350,
-        bgcolor="blue",
+        bgcolor="#2563eb",
         color="white",
         visible=False
     )
@@ -317,15 +348,16 @@ def Cambiacontraview(page: ft.Page, auth_ctrl):
         "Cambiar contraseña",
         on_click=login_click,
         width=350,
-        bgcolor="blue",
+        bgcolor="#2563eb",
         color="white"
     )
 
     return ft.View(
         route=page.route or "/confirmacion",
+        bgcolor="#0d0d0d",
         appbar=ft.AppBar(
-            title=ft.Text("MathQED - Recuperacion de Contraseña"),
-            bgcolor="bluegrey900",
+            title=ft.Text("MathQED - Recuperacion de Contraseña", color="white"),
+            bgcolor="#1a1a1a",
             color="white"
         ),
         vertical_alignment=ft.MainAxisAlignment.CENTER,
@@ -333,7 +365,7 @@ def Cambiacontraview(page: ft.Page, auth_ctrl):
         controls=[
             ft.Column(
                 [
-                    ft.Text("Nueva contraseña", size=24, weight="bold"),
+                    ft.Text("Nueva contraseña", size=24, weight="bold", color="white"),
                     pass_input,
                     conf_input,
                     login_button,

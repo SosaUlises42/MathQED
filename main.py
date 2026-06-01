@@ -2,8 +2,9 @@ import flet as ft
 from controllers.usercontroller import AuthController
 from controllers.promptcontroller import Request
 from views.loginview import LoginView
-from views.dashboardview import RegisterView, DashboardView
+from views.dashboardview import RegisterView, DashboardView, toPromptController
 from views.recoverview import RecoverView, Cambiacontraview
+from views.chatview import chatView
 
 def start(page: ft.Page):
     # Configuración básica de la página
@@ -35,11 +36,15 @@ def start(page: ft.Page):
             page.views.append(RegisterView(page, auth_ctrl))
         elif route == "/dashboard":
             print("Cargando DashboardView...")
-            page.views.append(DashboardView(page, Request))
+            page.views.append(DashboardView(page, prmt_crtl))
+        elif route == "/refresh":
+            page.views.append(toPromptController(page, prmt_crtl))
         elif route == "/recover":
             page.views.append(RecoverView(page, auth_ctrl))
         elif route == "/confirmacion":
             page.views.append(Cambiacontraview(page, auth_ctrl))
+        elif route == "/chat":
+            page.views.append(chatView(page, prmt_crtl))
 
         # seguridad por si la ruta no existe
         if not page.views:

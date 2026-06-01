@@ -187,6 +187,9 @@ def RegisterView(page: ft.Page, auth_controller):
         ]
     )
 
+def toPromptController(page: ft.Page, Request):
+    Request.stringChat("user", page.session.store.get("last_msg"))
+    page.go("/chat")
 
 def DashboardView(page: ft.Page, Request):
 
@@ -209,13 +212,6 @@ def DashboardView(page: ft.Page, Request):
         multiline=True
     )
 
-    def send_request_click(e):
-        if request_input.value.strip():
-            page.snack_bar = ft.SnackBar(ft.Text(f"Solicitud enviada: {request_input.value}"))
-            page.snack_bar.open = True
-            request_input.value = ""
-            page.update()
-
     request_row = ft.Row(
         [request_input],
         alignment=ft.MainAxisAlignment.CENTER,
@@ -224,9 +220,9 @@ def DashboardView(page: ft.Page, Request):
     )
     
     def click(e):
-        Request.stringDivisor(request_input.value)
-        request_input.value = ""
-        request_input.update()
+        page.session.store.set("last_msg", request_input.value)
+        page.go("/refresh")
+
 
     return ft.View(
 

@@ -1,4 +1,12 @@
 import random
+import re
+from sympy import Eq, solve, simplify, diff, integrate
+from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application, convert_xor
+
+transformations = standard_transformations + (
+    implicit_multiplication_application,
+    convert_xor
+)
 
 class Request:
 
@@ -7,12 +15,75 @@ class Request:
     @staticmethod
     def stringChat(au, st):
         Request.mensajes.append({
-            'autor':au,
-            'mensaje':st
-            })
+            'autor': au,
+            'mensaje': st
+        })
         print(Request.mensajes)
         if au == "user":
             Request.stringDivisor(st)
+
+    @staticmethod
+    def parse_math(expr):
+        expr = expr.replace("^", "**").replace("÷", "/")
+        expr = expr.replace("dx", "").replace("dy", "")
+        return parse_expr(expr, transformations=transformations, evaluate=True)
+
+    @staticmethod
+    def clean_text(text):
+        return re.sub(r"[^0-9A-Za-z\+\-\*\^\/\.=() ,]+", " ", text)
+
+    @staticmethod
+    def solve_equation(text):
+        if "=" not in text:
+            return None
+        left, right = text.split("=", 1)
+        left = Request.clean_text(left)
+        right = Request.clean_text(right)
+        try:
+            left_expr = Request.parse_math(left)
+            right_expr = Request.parse_math(right)
+            sol = solve(Eq(left_expr, right_expr))
+            if sol:
+                return f"Solución: {sol}"
+            return "No se encontró solución numérica evidente para esa ecuación."
+        except Exception:
+            return None
+
+    @staticmethod
+    def solve_arithmetic(text):
+        content = Request.clean_text(text)
+        if not re.search(r"[0-9]", content):
+            return None
+        try:
+            expr = Request.parse_math(content)
+            result = simplify(expr)
+            return f"Resultado: {result}"
+        except Exception:
+            return None
+
+    @staticmethod
+    def solve_derivative(text):
+        content = Request.clean_text(text)
+        if not content:
+            return None
+        try:
+            expr = Request.parse_math(content)
+            result = diff(expr)
+            return f"Derivada: {simplify(result)}"
+        except Exception:
+            return None
+
+    @staticmethod
+    def solve_integral(text):
+        content = Request.clean_text(text)
+        if not content:
+            return None
+        try:
+            expr = Request.parse_math(content)
+            result = integrate(expr)
+            return f"Integral: {simplify(result)} + C"
+        except Exception:
+            return None
 
     def stringDivisor(st):
         nOperacion = 0
@@ -51,39 +122,6 @@ class Request:
             "¿Cuál es la función a integrar? Escríbela tal como aparece en tu ejercicio. 😎"
         ]
 
-        limites = [
-            "¿Qué límite necesitas calcular? 📈",
-            "Escríbeme la expresión y el valor al que tiende la variable.",
-            "Comparte el límite tal como aparece en tu ejercicio. 👀",
-            "¿Cuál es la función y hacia qué valor se aproxima?",
-            "Envíame el límite completo y lo resolveremos juntos.",
-            "Perfecto, mándame la expresión para comenzar. ✍️",
-            "Estoy listo para calcular ese límite. 🚀",
-            "Comparte la función y el punto de evaluación."
-        ]
-
-        factorizacion = [
-            "¿Qué expresión deseas factorizar? 📚",
-            "Envíame el polinomio y buscaré sus factores.",
-            "Comparte la expresión algebraica que quieres factorizar.",
-            "¿Cuál es el polinomio? Escríbelo tal como aparece. ✍️",
-            "Perfecto, mándame la expresión y comenzamos.",
-            "Veamos si podemos descomponer esa expresión. 👀",
-            "Estoy listo para factorizar. 🚀",
-            "Pásame la expresión algebraica completa."
-        ]
-
-        simplificacion = [
-            "¿Qué expresión deseas simplificar? 📚",
-            "Comparte la expresión y buscaré una forma más simple.",
-            "Envíame la expresión algebraica completa. ✍️",
-            "¿Qué operación necesitas simplificar? 👀",
-            "Perfecto, mándame la expresión y la analizamos.",
-            "Veamos si podemos reducir esa expresión. 🚀",
-            "Comparte la operación tal como aparece en tu ejercicio.",
-            "Estoy listo para simplificar la expresión."
-        ]
-
         desconocido = [
             "No estoy seguro de lo que necesitas. ¿Podrías explicarlo de otra forma? 🤔",
             "Todavía no sé cómo ayudarte con eso, pero puedes intentar describir tu problema matemático. 📚",
@@ -91,22 +129,42 @@ class Request:
             "¿Podrías darme más detalles? Intentaré ayudarte. 😎",
             "Aún estoy aprendiendo. Prueba escribiendo el ejercicio directamente. ✍️"
         ]
-        
-        for x in texto.split():
-            if x == "ecuacion" or x == "resuelve" or x == "despeja" or x == "resolver" or x == "despejar" or x == "ecuaciones":
-                nOperacion = 1
-            elif x == "derivada" or x == "deriva" or x == "derivar" or x == "derivadas":
-                nOperacion = 2
-            elif x == "integra" or x == "integrar" or x == "integral" or x == "integrales":
-                nOperacion = 3
-                
-        if nOperacion == 0:
-            Request.stringChat("machine",random.choice(desconocido))
-        elif nOperacion == 1:
-            Request.stringChat("machine",random.choice(ecuaciones))
-        elif nOperacion == 2:
-            Request.stringChat("machine",random.choice(derivadas))
-        elif nOperacion == 3:
-            Request.stringChat("machine",random.choice(integrales))
+
+        texto_limpio = Request.clean_text(texto)
+        if any(word in texto for word in ["hola", "buenas", "saludos"]):
+            Request.stringChat("machine", random.choice(saludos))
+            return
+
+        if "deriv" in texto or "deriva" in texto:
+            respuesta = Request.solve_derivative(texto_limpio)
+            if respuesta:
+                Request.stringChat("machine", respuesta)
+                return
+            Request.stringChat("machine", random.choice(derivadas))
+            return
+
+        if "integr" in texto:
+            respuesta = Request.solve_integral(texto_limpio)
+            if respuesta:
+                Request.stringChat("machine", respuesta)
+                return
+            Request.stringChat("machine", random.choice(integrales))
+            return
+
+        if "=" in texto:
+            respuesta = Request.solve_equation(texto)
+            if respuesta:
+                Request.stringChat("machine", respuesta)
+                return
+            Request.stringChat("machine", random.choice(ecuaciones))
+            return
+
+        if re.search(r"[0-9]", texto) and re.search(r"[\+\-\*\/\^]", texto):
+            respuesta = Request.solve_arithmetic(texto)
+            if respuesta:
+                Request.stringChat("machine", respuesta)
+                return
+
+        Request.stringChat("machine", random.choice(desconocido))
 
     

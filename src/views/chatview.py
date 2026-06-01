@@ -49,11 +49,16 @@ def chatView(page: ft.Page, Request):
         label_style=ft.TextStyle(color="#999999", size=13),
         content_padding=20,
         min_lines=1,
-        max_lines=3,
-        multiline=True
+        max_lines=1,
+        multiline=False,
+        on_submit=lambda e: click(e)
     )
 
     def click(e):
+        if not request_input.value or not request_input.value.strip():
+            Request.stringChat("machine", "Por favor escribe algo antes de enviar.")
+            page.go("/chat")
+            return
         page.session.store.set("last_msg", request_input.value)
         page.go("/refresh")
 
@@ -124,6 +129,7 @@ def chatView(page: ft.Page, Request):
                     ],
 
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    scroll=ft.ScrollMode.AUTO
                 )
             )
         ]

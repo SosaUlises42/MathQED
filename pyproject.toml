@@ -12,6 +12,7 @@ dependencies = [
     "mysql-connector-python>=9.6.0",
     "pydantic>=2.12.5",
     "python-dotenv>=1.2.2",
+    "sympy>=1.12",
     "setuptools>=79.0.0",
 ]
 

@@ -163,26 +163,31 @@ def RegisterView(page: ft.Page, auth_controller):
             color="white"
         ),
         controls=[
-            ft.Column(
-                [
-                    ft.Text("Crear una cuenta nueva", size=24, weight="bold", color="white"),
-                    nombre_input,
-                    email_input,
-                    crtl_input,
-                    password_input,
-                    password_confirm_input,
-                    grado_input,
-                    grupo_input,
-                    register_button,
-                    ft.TextButton(
-                        "Volver al login",
-                        on_click=lambda _: page.go("/"),
-                        style=ft.ButtonStyle(color="#aaaaaa")
-                    )
-                ],
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                tight=True,
-                spacing=20
+            ft.Container(
+                expand=True,
+                padding=20,
+                content=ft.Column(
+                    [
+                        ft.Text("Crear una cuenta nueva", size=24, weight="bold", color="white"),
+                        nombre_input,
+                        email_input,
+                        crtl_input,
+                        password_input,
+                        password_confirm_input,
+                        grado_input,
+                        grupo_input,
+                        register_button,
+                        ft.TextButton(
+                            "Volver al login",
+                            on_click=lambda _: page.go("/"),
+                            style=ft.ButtonStyle(color="#aaaaaa")
+                        )
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    tight=True,
+                    spacing=20,
+                    scroll=ft.ScrollMode.AUTO
+                )
             )
         ]
     )
@@ -208,8 +213,9 @@ def DashboardView(page: ft.Page, Request):
         label_style=ft.TextStyle(color="#999999", size=13),
         content_padding=20,
         min_lines=1,
-        max_lines=3,
-        multiline=True
+        max_lines=1,
+        multiline=False,
+        on_submit=lambda e: click(e)
     )
 
     request_row = ft.Row(

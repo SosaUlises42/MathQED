@@ -30,21 +30,34 @@ class Request:
 
     @staticmethod
     def clean_text(text):
-        return re.sub(r"[^0-9A-Za-z\+\-\*\^\/\.=() ,]+", " ", text)
+        # Solo elimina caracteres especiales que no sean matemáticos
+        return re.sub(r"[^0-9A-Za-z\+\-\*\^\/\.\=\(\)\s]", "", text).strip()
+
+    @staticmethod
+    def clean_output(text):
+        # Convierte a string y limpia solo caracteres matemáticos válidos
+        text_str = str(text)
+        # Reemplaza caracteres especiales de SymPy
+        text_str = text_str.replace("**", "^")  # Exponentes
+        # Solo mantén: números, letras, +, -, *, /, ^, ., (, ), espacios
+        cleaned = ""
+        for char in text_str:
+            if char.isalnum() or char in "+-*/.^() ":
+                cleaned += char
+        return cleaned.strip()
 
     @staticmethod
     def solve_equation(text):
+        text = Request.clean_text(text)
         if "=" not in text:
             return None
         left, right = text.split("=", 1)
-        left = Request.clean_text(left)
-        right = Request.clean_text(right)
         try:
-            left_expr = Request.parse_math(left)
-            right_expr = Request.parse_math(right)
+            left_expr = Request.parse_math(left.strip())
+            right_expr = Request.parse_math(right.strip())
             sol = solve(Eq(left_expr, right_expr))
             if sol:
-                return f"Solución: {sol}"
+                return f"Solución: {Request.clean_output(sol)}"
             return "No se encontró solución numérica evidente para esa ecuación."
         except Exception:
             return None
@@ -55,9 +68,9 @@ class Request:
         if not re.search(r"[0-9]", content):
             return None
         try:
-            expr = Request.parse_math(content)
+            expr = Request.parse_math(content.strip())
             result = simplify(expr)
-            return f"Resultado: {result}"
+            return f"Resultado: {Request.clean_output(result)}"
         except Exception:
             return None
 
@@ -67,9 +80,15 @@ class Request:
         if not content:
             return None
         try:
-            expr = Request.parse_math(content)
-            result = diff(expr)
-            return f"Derivada: {simplify(result)}"
+            expr = Request.parse_math(content.strip())
+            # Obtener la variable con respecto a la cual derivar
+            var = None
+            if expr.free_symbols:
+                var = list(expr.free_symbols)[0]
+            if var is None:
+                return "No se encontró una variable en la expresión."
+            result = diff(expr, var)
+            return f"Derivada: {Request.clean_output(simplify(result))}"
         except Exception:
             return None
 
@@ -79,9 +98,15 @@ class Request:
         if not content:
             return None
         try:
-            expr = Request.parse_math(content)
-            result = integrate(expr)
-            return f"Integral: {simplify(result)} + C"
+            expr = Request.parse_math(content.strip())
+            # Obtener la variable con respecto a la cual integrar
+            var = None
+            if expr.free_symbols:
+                var = list(expr.free_symbols)[0]
+            if var is None:
+                return "No se encontró una variable en la expresión."
+            result = integrate(expr, var)
+            return f"Integral: {Request.clean_output(simplify(result))} + C"
         except Exception:
             return None
 
@@ -130,27 +155,35 @@ class Request:
             "Aún estoy aprendiendo. Prueba escribiendo el ejercicio directamente. ✍️"
         ]
 
-        texto_limpio = Request.clean_text(texto)
         if any(word in texto for word in ["hola", "buenas", "saludos"]):
             Request.stringChat("machine", random.choice(saludos))
             return
 
-        if "deriv" in texto or "deriva" in texto:
-            respuesta = Request.solve_derivative(texto_limpio)
-            if respuesta:
-                Request.stringChat("machine", respuesta)
-                return
+        # Detectar derivadas - extraer la expresión después del comando
+        if "deriv" in texto:
+            # Extraer solo la parte de la expresión (después de "deriv" o "deriva")
+            expresion = re.sub(r"^(deriv|deriva|derivada)\s+", "", texto).strip()
+            if expresion and expresion != "":
+                respuesta = Request.solve_derivative(expresion)
+                if respuesta:
+                    Request.stringChat("machine", respuesta)
+                    return
             Request.stringChat("machine", random.choice(derivadas))
             return
 
+        # Detectar integrales - extraer la expresión después del comando
         if "integr" in texto:
-            respuesta = Request.solve_integral(texto_limpio)
-            if respuesta:
-                Request.stringChat("machine", respuesta)
-                return
+            # Extraer solo la parte de la expresión (después de "integr" o "integral")
+            expresion = re.sub(r"^(integr|integral|integra)\s+", "", texto).strip()
+            if expresion and expresion != "":
+                respuesta = Request.solve_integral(expresion)
+                if respuesta:
+                    Request.stringChat("machine", respuesta)
+                    return
             Request.stringChat("machine", random.choice(integrales))
             return
 
+        # Detectar ecuaciones (contiene "=")
         if "=" in texto:
             respuesta = Request.solve_equation(texto)
             if respuesta:
@@ -159,6 +192,7 @@ class Request:
             Request.stringChat("machine", random.choice(ecuaciones))
             return
 
+        # Detectar operaciones aritméticas
         if re.search(r"[0-9]", texto) and re.search(r"[\+\-\*\/\^]", texto):
             respuesta = Request.solve_arithmetic(texto)
             if respuesta:

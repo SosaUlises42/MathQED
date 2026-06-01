@@ -1,10 +1,10 @@
 import flet as ft 
-from controllers.usercontroller import AuthController
-from controllers.promptcontroller import Request
-from views.loginview import LoginView
-from views.dashboardview import RegisterView, DashboardView, toPromptController
-from views.recoverview import RecoverView, Cambiacontraview
-from views.chatview import chatView
+from src.controllers.usercontroller import AuthController
+from src.controllers.promptcontroller import Request
+from src.views.loginview import LoginView
+from src.views.dashboardview import RegisterView, DashboardView, toPromptController
+from src.views.recoverview import RecoverView, Cambiacontraview
+from src.views.chatview import chatView
 
 def start(page: ft.Page):
     # Configuración básica de la página

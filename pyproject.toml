@@ -24,7 +24,7 @@ app = "main:main"
 
 [tool.setuptools]
 py-modules = ["main"]
+packages = ["src"]
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["views*", "models*", "controllers*", "assets*"]
+[tool.setuptools.package-data]
+src = ["**/*"]

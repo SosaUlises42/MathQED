@@ -1,5 +1,2 @@
-assets
-controllers
 main
-models
-views
+src

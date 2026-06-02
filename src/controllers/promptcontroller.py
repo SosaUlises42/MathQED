@@ -1,7 +1,9 @@
 import random
+import flet as ft
 import re
 from sympy import Eq, solve, simplify, diff, integrate
 from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application, convert_xor
+from src.models.databasemodel import Database
 
 transformations = standard_transformations + (
     implicit_multiplication_application,
@@ -12,6 +14,10 @@ class Request:
 
     mensajes = []
 
+    def __init__(self, page):
+        self.db = Database()
+        self.page = page
+
     @staticmethod
     def stringChat(au, st):
         Request.mensajes.append({
@@ -21,6 +27,13 @@ class Request:
         print(Request.mensajes)
         if au == "user":
             Request.stringDivisor(st)
+        elif au == "bot":
+        # aquí ya tienes el flujo completo user → bot
+            peticion = Request.mensajes[-2]["mensaje"]  # usuario
+            respuesta = st  # bot
+
+            Request.historialChat(peticion, respuesta)
+
 
     @staticmethod
     def parse_math(expr):
@@ -50,6 +63,8 @@ class Request:
     def solve_equation(text):
         text = Request.clean_text(text)
         if "=" not in text:
+            print("no hay =")
+            Request.stringChat("machine","Parece que algo salio mal, lo sentimos por las molestias")
             return None
         left, right = text.split("=", 1)
         try:
@@ -57,21 +72,31 @@ class Request:
             right_expr = Request.parse_math(right.strip())
             sol = solve(Eq(left_expr, right_expr))
             if sol:
+                txt = "La respuesta de tu ecuacion es " + str(sol[0])
+                Request.stringChat("machine",txt)
                 return f"Solución: {Request.clean_output(sol)}"
-            return "No se encontró solución numérica evidente para esa ecuación."
-        except Exception:
+            else: 
+                Request.stringChat("machine","No se encontró solución numérica evidente para esa ecuación.")
+        except Exception as e:
+            print("ERROR:", e)
+            Request.stringChat("machine","Parece que algo salio mal, lo sentimos por las molestias")
             return None
 
     @staticmethod
     def solve_arithmetic(text):
         content = Request.clean_text(text)
         if not re.search(r"[0-9]", content):
+            Request.stringChat("machine","Parece que algo salio mal, lo sentimos por las molestias")
             return None
         try:
             expr = Request.parse_math(content.strip())
             result = simplify(expr)
-            return f"Resultado: {Request.clean_output(result)}"
-        except Exception:
+            result = str(result).replace('**','^')
+            txt = "La respuesta de tu operacion es " + result
+            Request.stringChat("machine",txt)
+        except Exception as e:
+            print("ERROR:", e)
+            Request.stringChat("machine","Parece que algo salio mal, lo sentimos por las molestias")
             return None
 
     @staticmethod
@@ -86,10 +111,14 @@ class Request:
             if expr.free_symbols:
                 var = list(expr.free_symbols)[0]
             if var is None:
-                return "No se encontró una variable en la expresión."
+                Request.stringChat("machine","No se encontró una variable en la expresión.")
             result = diff(expr, var)
-            return f"Derivada: {Request.clean_output(simplify(result))}"
-        except Exception:
+            result = str(result).replace('**','^')
+            txt = "La derivada de esa expresion es " + result
+            Request.stringChat("machine",txt)
+        except Exception as e:
+            print("ERROR:", e)
+            Request.stringChat("machine","Parece que algo salio mal, lo sentimos por las molestias")
             return None
 
     @staticmethod
@@ -104,15 +133,19 @@ class Request:
             if expr.free_symbols:
                 var = list(expr.free_symbols)[0]
             if var is None:
-                return "No se encontró una variable en la expresión."
+                Request.stringChat("machine","No se encontró una variable en la expresión.")
             result = integrate(expr, var)
-            return f"Integral: {Request.clean_output(simplify(result))} + C"
-        except Exception:
+            result = str(result).replace('**','^')
+            txt = "La integral de esa expresion es " + result + "+ C"
+            Request.stringChat("machine",txt)
+        except Exception as e:
+            print("ERROR:", e)
+            Request.stringChat("machine","Parece que algo salio mal, lo sentimos por las molestias")
             return None
 
     def stringDivisor(st):
-        nOperacion = 0
         texto = st.lower()
+        expr = ""
 
         saludos = [
             "¡Hola! ¿En qué problema matemático puedo ayudarte hoy? 😎",
@@ -155,50 +188,55 @@ class Request:
             "Aún estoy aprendiendo. Prueba escribiendo el ejercicio directamente. ✍️"
         ]
 
-        if any(word in texto for word in ["hola", "buenas", "saludos"]):
+        if any(word in texto for word in ["oi","hola","ey","que onda","oye","hi","we","bro"]):
             Request.stringChat("machine", random.choice(saludos))
             return
+        
+        for x in texto.split():
+            if re.search(r"[a-zA-Z0-9]", x) and re.search(r"[\+\-\*\/\^\=\(\)]", x):
+                expr = expr + x
 
         # Detectar derivadas - extraer la expresión después del comando
-        if "deriv" in texto:
-            # Extraer solo la parte de la expresión (después de "deriv" o "deriva")
-            expresion = re.sub(r"^(deriv|deriva|derivada)\s+", "", texto).strip()
-            if expresion and expresion != "":
-                respuesta = Request.solve_derivative(expresion)
-                if respuesta:
-                    Request.stringChat("machine", respuesta)
-                    return
-            Request.stringChat("machine", random.choice(derivadas))
-            return
-
+        if "deriv" in texto or "dx/" in texto:
+            print(expr)
+            if expr != "":
+                Request.solve_derivative(expr)
+            else:
+                Request.stringChat("machine", random.choice(derivadas))
         # Detectar integrales - extraer la expresión después del comando
-        if "integr" in texto:
-            # Extraer solo la parte de la expresión (después de "integr" o "integral")
-            expresion = re.sub(r"^(integr|integral|integra)\s+", "", texto).strip()
-            if expresion and expresion != "":
-                respuesta = Request.solve_integral(expresion)
-                if respuesta:
-                    Request.stringChat("machine", respuesta)
-                    return
-            Request.stringChat("machine", random.choice(integrales))
-            return
-
+        elif "integr" in texto:
+            print(expr)
+            if expr != "":
+                Request.solve_integral(expr)
+            else:
+                Request.stringChat("machine", random.choice(integrales))
         # Detectar ecuaciones (contiene "=")
-        if "=" in texto:
-            respuesta = Request.solve_equation(texto)
-            if respuesta:
-                Request.stringChat("machine", respuesta)
-                return
-            Request.stringChat("machine", random.choice(ecuaciones))
-            return
+        elif "ecuac" in texto or "despej" in texto:
+            print(expr)
+            if expr != "":
+                Request.solve_equation(expr)
+            else:
+                Request.stringChat("machine", random.choice(ecuaciones))
+        elif "suma" in texto or "resta" in texto or "divi" in texto or "multipli" in texto or "+" in texto or "-" in texto or "/" in texto or "*" in texto:
+            print(expr)
+            if expr != "":
+                Request.solve_arithmetic(expr)
+        else:
+            Request.stringChat("machine", random.choice(desconocido))
 
-        # Detectar operaciones aritméticas
-        if re.search(r"[0-9]", texto) and re.search(r"[\+\-\*\/\^]", texto):
-            respuesta = Request.solve_arithmetic(texto)
-            if respuesta:
-                Request.stringChat("machine", respuesta)
-                return
+    def historialChat(self, page: ft.Page, peticion, respuesta):
+        usuario = page.session.store.get("user")
+        id = usuario["Usuario_ID"]
 
-        Request.stringChat("machine", random.choice(desconocido))
-
-    
+        conn = self.db.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO historial
+            (Ejercicio, Resultado, Usuario_ID)
+            VALUES (%s, %s, %s)
+            """,
+            (
+                peticion,respuesta, id
+            )
+)

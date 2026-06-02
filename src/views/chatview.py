@@ -129,7 +129,6 @@ def chatView(page: ft.Page, Request):
                     ],
 
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                    scroll=ft.ScrollMode.AUTO
                 )
             )
         ]

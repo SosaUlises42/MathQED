@@ -193,8 +193,8 @@ def RegisterView(page: ft.Page, auth_controller):
     )
 
 def toPromptController(page: ft.Page, Request):
-    Request.stringChat("user", page.session.store.get("last_msg"))
-    page.go("/chat")
+    Request.stringChat("ejercicio", page.session.store.get("last_msg"))
+    page.go("/sthistorial")
 
 def DashboardView(page: ft.Page, Request):
 
@@ -248,15 +248,20 @@ def DashboardView(page: ft.Page, Request):
         actions=[
 
             ft.TextButton(
-
                 "Salir",
-
                 style=ft.ButtonStyle(
                     color="white"
                 ),
-
                 on_click=lambda _:
                 page.go("/")
+            ),
+            ft.TextButton(
+                "Ir a Historial",
+                style=ft.ButtonStyle(
+                    color="white"
+                ),
+                on_click=lambda _:
+                page.go("/historial")
             )
         ]
     ),

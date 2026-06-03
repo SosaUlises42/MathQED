@@ -41,7 +41,8 @@ def LoginView(page: ft.Page, auth_controller):
 
         if user:
             page.session.store.set("user", user)
-            page.go("/dashboard")
+            page.session.store.set("where", "login")
+            page.go("/gthistorial")
         else:
             page.snack_bar = ft.SnackBar(ft.Text(msg))
             page.snack_bar.open = True

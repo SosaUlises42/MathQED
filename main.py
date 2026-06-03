@@ -5,6 +5,7 @@ from src.views.loginview import LoginView
 from src.views.dashboardview import RegisterView, DashboardView, toPromptController
 from src.views.recoverview import RecoverView, Cambiacontraview
 from src.views.chatview import chatView
+from src.views.historialview import historialView, setHistorial, getHistorial
 
 def start(page: ft.Page):
     # Configuración básica de la página
@@ -45,6 +46,12 @@ def start(page: ft.Page):
             page.views.append(Cambiacontraview(page, auth_ctrl))
         elif route == "/chat":
             page.views.append(chatView(page, prmt_crtl))
+        elif route == "/historial":
+            page.views.append(historialView(page, prmt_crtl))
+        elif route == "/sthistorial":
+            page.views.append(setHistorial(page, prmt_crtl))
+        elif route == "/gthistorial":
+            page.views.append(getHistorial(page, prmt_crtl))
 
         # seguridad por si la ruta no existe
         if not page.views:

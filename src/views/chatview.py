@@ -5,7 +5,7 @@ def chatView(page: ft.Page, Request):
     chat_globe = []
     for mensaje in Request.mensajes:
         print(len(chat_globe))
-        if mensaje["autor"] == 'user':
+        if mensaje["autor"] == 'ejercicio':
             chat_globe.append(
                 ft.Container(
                     content=ft.Text(
@@ -77,6 +77,10 @@ def chatView(page: ft.Page, Request):
         spacing=10
     )
 
+    def goHistorial(e):
+        page.session.store.set("where", "chat")
+        page.go("/gthistorial")
+
     return ft.View(
         route="/chat",
         bgcolor="#0d0d0d",
@@ -95,6 +99,13 @@ def chatView(page: ft.Page, Request):
                     ),
                     on_click=lambda _:
                     page.go("/")
+                ),
+                ft.TextButton(
+                    "Ir a Historial",
+                    style=ft.ButtonStyle(
+                        color="white"
+                    ),
+                    on_click=goHistorial
                 )
             ]
         ),

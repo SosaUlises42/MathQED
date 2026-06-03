@@ -32,13 +32,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `NumCtrl_Unico` (`NumeroCRTL`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT IGNORE INTO `user` (`Nombre`, `Correo`, `NumeroCRTL`, `Password_Hash`, `Grado`, `Grupo`) 
+VALUES ('Sosa', 'parafc2026@gmail.com', '23308060610395', '$2b$12$XA4.6iYUtLz3yKBMgcMOF.RQY5MsZ8KrsQGkx6ft7Pp0btKZ//x0W', '6', 'D');
+
 -- Volcando estructura para tabla mathqed.historial
 CREATE TABLE IF NOT EXISTS `historial` (
   `id_Consulta` int(11) NOT NULL AUTO_INCREMENT,
   `Ejercicio` varchar(255) NOT NULL,
   `Resultado` text NOT NULL,
   `Favorito` tinyint(1) NOT NULL DEFAULT 0,
-  `Fecha_Consulta` datetime NOT NULL DEFAULT current_timestamp(),
   `Usuario_ID` int(11) NOT NULL,
   PRIMARY KEY (`id_Consulta`),
   KEY `Usuario_ID` (`Usuario_ID`),
